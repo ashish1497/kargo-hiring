@@ -3,7 +3,7 @@
 import { App, Button, Input, Popconfirm, Tooltip } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { confirmSend, makeBrief, saveEmail, saveName } from "@/app/actions";
 import { ScoreCells, TotalBar } from "@/components/marks";
 import { RetryButton } from "@/components/RetryButton";
@@ -328,6 +328,11 @@ function DecisionBar(props: { id: string; email: Email; to: string; queue: Queue
   const sent = email.status === "sent";
   const nextHref = queue?.nextUndecidedId ? `/candidates/${queue.nextUndecidedId}` : null;
   const dirty = props.subject !== email.subject || props.body !== email.body;
+
+  // Warm the routes the bar can jump to, so triage navigation is instant.
+  useEffect(() => {
+    for (const id of [queue?.nextUndecidedId, queue?.nextId, queue?.prevId]) if (id) router.prefetch(`/candidates/${id}`);
+  }, [router, queue?.nextUndecidedId, queue?.nextId, queue?.prevId]);
 
   function send() {
     start(async () => {

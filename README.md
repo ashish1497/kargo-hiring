@@ -36,6 +36,15 @@ inputs for training.
 
 ## Deploy (Vercel)
 Import the repo, set every variable from `.env.example` **except** `SUPABASE_DB_URL`, deploy.
+`vercel.json` pins functions to `sin1` (Singapore), next to the Supabase project (`ap-southeast-1`);
+keep them in the same region or every query pays a cross-world round trip.
+
+## Performance
+Pages are server-rendered and stream: each route has a `loading.tsx` skeleton that Next prefetches,
+so a click paints the next screen's layout immediately while data loads (~0.2–0.5 s locally in
+production). The rubric and row loaders are deduplicated per request with React `cache`, and the
+candidate page prefetches the previous/next/next-undecided candidates. `npm run dev` recompiles routes
+on first visit and after edits, so judge speed with `npm run build && npm start`.
 `.env.local` and `seed/` (real people's CVs) are gitignored.
 
 ## Tests

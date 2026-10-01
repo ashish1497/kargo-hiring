@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { db, getRubric, ROLES, type Role } from "./db";
 import { cutoff, otherRole, rank } from "./ranking";
 
@@ -20,7 +21,8 @@ export type Row = {
   createdAt: string;
 };
 
-export async function loadRows(): Promise<Row[]> {
+/** All candidates with totals, ranks and email state; deduplicated per request. */
+export const loadRows = cache(async function loadRows(): Promise<Row[]> {
   const [cands, pii, totals, scores, emails, briefs, rubric] = await Promise.all([
     db().from("candidates").select("id, applied_role, status, error, headline, created_at"),
     db().from("candidate_pii").select("candidate_id, name"),
@@ -71,7 +73,7 @@ export async function loadRows(): Promise<Row[]> {
     r.otherRoleFit = Boolean(mine) && bar !== undefined && (r.totals[other] ?? 0) >= bar && !r.aboveLine;
   }
   return rows;
-}
+});
 
 export async function loadCandidate(id: string) {
   const [cand, pii, scores, briefs, email, rubric] = await Promise.all([
@@ -83,11 +85,6 @@ export async function loadCandidate(id: string) {
     getRubric(),
   ]);
   if (!cand.data) return null;
-  let fileUrl: string | null = null;
-  if (cand.data.file_path) {
-    const signed = await db().storage.from("cvs").createSignedUrl(cand.data.file_path, 600);
-    fileUrl = signed.data?.signedUrl ?? null;
-  }
   return {
     candidate: cand.data,
     pii: pii.data,
@@ -95,6 +92,6 @@ export async function loadCandidate(id: string) {
     scores: scores.data ?? [],
     briefs: briefs.data ?? [],
     email: email.data,
-    fileUrl,
+    fileUrl: cand.data.file_path ? `/api/candidates/${id}/cv` : null,
   };
 }

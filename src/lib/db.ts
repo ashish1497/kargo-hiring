@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { cache } from "react";
 import { env } from "./env";
 
 import type { Role } from "./ranking";
@@ -52,7 +53,8 @@ export async function must<T>(query: PromiseLike<{ data: T; error: { message: st
   return data;
 }
 
-export async function getRubric(): Promise<Criterion[]> {
+/** Rubric rows; deduplicated per request with React cache. */
+export const getRubric = cache(async function getRubric(): Promise<Criterion[]> {
   const { data, error } = await db()
     .from("rubric_criteria")
     .select("*")
@@ -61,4 +63,4 @@ export async function getRubric(): Promise<Criterion[]> {
   if (error) throw error;
   if (!data?.length) throw new Error("rubric_criteria is empty — run scripts/seed-rubric.mjs");
   return data as Criterion[];
-}
+});

@@ -75,6 +75,14 @@ try {
   check(/\d{2} \/ \d{2} · \d+ decided/.test(detailHtml.replace(/<!-- -->/g, "")), "candidate page shows triage queue position");
   check(detailHtml.includes(`Hi ${pii0!.name.split(" ")[0]},`), "preview shows the real first name, not a placeholder");
   check((await http("/roles/CEO")).status === 404, "unknown role → 404");
+  check((await http("/candidates/not-a-uuid")).status === 404, "malformed candidate id → 404");
+  const t = Date.now();
+  const first = await http("/roles/PM");
+  const reader = first.body!.getReader();
+  await reader.read();
+  const firstChunkMs = Date.now() - t;
+  await reader.cancel();
+  check(firstChunkMs < 1500, `shortlist streams its loading shell quickly (${firstChunkMs}ms to first chunk)`);
 
   console.log("\nSend guard (no email leaves)");
   // Point delivery at an address outside the allowed domain, so the guard must block before Resend.
