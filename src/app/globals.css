@@ -1,26 +1,147 @@
+/* antd sits between Tailwind's base (preflight) and utilities: preflight can't break antd,
+   and Tailwind utilities can still adjust antd components. */
+@layer theme, base, antd, components, utilities;
 @import "tailwindcss";
 
+/*
+  Design system: Swiss / International Typographic Style + Tufte data-ink, with a Memphis accent layer.
+  - Data zones (tables, scores, evidence, email text): neutral ink on paper, hairline rules, 12-col grid.
+  - Chrome zones (header, page titles, drop zone, empty/done states, buttons, decision bar): Memphis
+    shapes, patterns, 2px ink outlines and hard offset shadows.
+  - In data, every colour has one job:
+      green  = invite / above the line / sent
+      coral  = rejection
+      yellow = needs attention (failed, name unconfirmed) — always as a fill behind ink text
+      blue   = links
+    Strength (scores, totals) uses its own red → amber → green scale so a column can be scanned.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fffdf7;
+  --ink: #111111;
+  --ink-2: #4a4a4a;
+  --muted: #7d7a72;
+  --rule: #e8e4d8;
+  --rule-strong: #111111;
+  --signal: #15803d;
+  --signal-soft: #e7f6ec;
+  --coral: #f25f4c;
+  --coral-ink: #b8321f;
+  --sun: #ffd23f;
+  --sky: #2563eb;
+  --alert: #b8321f;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-signal: var(--signal);
+  --color-signal-soft: var(--signal-soft);
+  --color-alert: var(--alert);
+  --color-coral: var(--coral);
+  --color-coral-ink: var(--coral-ink);
+  --color-sun: var(--sun);
+  --color-sky: var(--sky);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Type scale (px): 11 label · 13 small · 15 body · 20 h3 · 28 h2 · 44 display */
+  --text-label: 11px;
+  --text-label--line-height: 16px;
+  --text-small: 13px;
+  --text-small--line-height: 20px;
+  --text-body: 15px;
+  --text-body--line-height: 24px;
+  --text-h3: 20px;
+  --text-h3--line-height: 28px;
+  --text-h2: 28px;
+  --text-h2--line-height: 34px;
+  --text-display: 44px;
+  --text-display--line-height: 44px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+}
+
+/* Section label: the Swiss small-caps marker above each block. */
+.label {
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Shortlist cut: the strongest line on the page. */
+.shortlist-cut > td {
+  border-bottom: 2px solid var(--signal) !important;
+}
+.below-line > td {
+  color: var(--ink-2);
+}
+
+/* ---------- Memphis accent layer (chrome only) ---------- */
+
+/* Neo-Memphis buttons: 2px ink outline + hard offset shadow; press = shadow collapses. */
+.ant-btn-primary:not(:disabled),
+.ant-btn-default:not(:disabled):not(.ant-btn-text) {
+  border: 2px solid var(--ink) !important;
+  box-shadow: 3px 3px 0 var(--ink) !important;
+  transition: transform 80ms ease, box-shadow 80ms ease !important;
+}
+.ant-btn-primary:not(:disabled):hover,
+.ant-btn-default:not(:disabled):not(.ant-btn-text):hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink) !important;
+}
+.ant-btn-primary:not(:disabled):active,
+.ant-btn-default:not(:disabled):not(.ant-btn-text):active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink) !important;
+}
+.btn-coral.ant-btn-primary:not(:disabled) {
+  background: var(--coral) !important;
+  color: var(--ink) !important;
+}
+
+/* Patterned drop zone: dot grid + dashed ink border. */
+.memphis-drop .ant-upload-drag {
+  border: 2px dashed var(--ink) !important;
+  background-color: #ffffff !important;
+  background-image: radial-gradient(var(--sun) 1.6px, transparent 1.8px) !important;
+  background-size: 16px 16px !important;
+}
+.memphis-drop .ant-upload-drag:hover {
+  border-color: var(--sky) !important;
+}
+
+/* Active nav item: highlighter stroke. */
+.nav-active {
+  background: linear-gradient(transparent 58%, var(--sun) 58%, var(--sun) 92%, transparent 92%);
+}
+
+/* Sticker: rotated badge with outline and hard shadow (sent / done moments). */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 4px 10px;
+  font-weight: 600;
+  transform: rotate(-3deg);
+}
+
+/* Attention chip: yellow fill behind ink text (yellow is never used as text colour). */
+.attention {
+  background: var(--sun);
+  color: var(--ink);
+  padding: 1px 6px;
+  font-weight: 500;
 }

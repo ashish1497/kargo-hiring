@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kargo Hiring Dashboard
 
-## Getting Started
+Internal tool for Arjun (founder, Kargo). Upload CVs → personal details split off → scored against the
+PM and SPM rubrics in `rubric.txt` (derived from Kargo's past hires, not the JDs) → ranked shortlist per
+role with a 3-sentence interview brief for the top 5 and a draft email for everyone. **Nothing is sent until
+Arjun clicks Confirm & send.**
 
-First, run the development server:
+See `PLAN.md` for the design and `rubric.txt` for the rubric and the hire evidence behind each criterion.
 
+## Pipeline
+| Step | Where | Notes |
+| --- | --- | --- |
+| Upload CV + applied role | `/` → `POST /api/candidates` | PDF/DOCX ≤ 4 MB; role chosen per batch (PM or SPM) |
+| Parse | `src/lib/parse.ts` | unpdf / mammoth; strips control chars |
+| Split personal details | `src/lib/pii.ts` | Deterministic (no AI). Name/email/phone/links → `candidate_pii`; redacted text → `candidates.cv_content`. Fails the CV if anything leaks |
+| Score both rubrics | `src/lib/pipeline.ts` | One Gemini call, 1–5 + reason per criterion. Totals computed in SQL (`candidate_totals`) |
+| Rank, brief, drafts | `POST /api/sync` | Top 5 per applied role → brief + invite; others → rejection. Batched; client loops until `remaining: 0`. Never touches sent emails |
+| Review + send | `/roles/PM`, `/roles/SPM`, `/candidates/[id]` | Edit draft, Confirm & send via Resend. Recipient must be on `EMAIL_ALLOWED_DOMAIN` |
+
+## Setup
 ```bash
+npm install
+cp .env.example .env.local   # fill in values
+npm run db:schema            # applies supabase/schema.sql (idempotent; needs psql)
+npm run seed:rubric          # loads rubric.txt into rubric_criteria
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`SUPABASE_DB_URL` must use the **session pooler** (`aws-0-<region>.pooler.supabase.com:5432`, user
+`postgres.<project-ref>`); the direct `db.<ref>.supabase.co` host is IPv6-only. It is only needed for
+`db:schema`, not at runtime.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Gemini keys go in `GEMINI_API_KEYS` (comma-separated; rotated on 429/5xx). They are sent as `?key=`,
+so the REST API is called directly rather than through the SDK. Use billed keys: the free tier may use
+inputs for training.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy (Vercel)
+Import the repo, set every variable from `.env.example` **except** `SUPABASE_DB_URL`, deploy.
+`.env.local` and `seed/` (real people's CVs) are gitignored.
 
-## Learn More
+## Tests
+| Command | What | Needs |
+| --- | --- | --- |
+| `npm test` | Unit tests: PII split (incl. all 68 seed CVs), ranking, rubric file, prompts, Gemini key rotation, mail guard, pipeline failure paths | nothing (seed CVs optional) |
+| `npm run smoke` | Checkpoint B-1 on 3 CVs through the live API + DB: validation, privacy split, totals = weighted sum, briefs, drafts, pages, send guard. Cleans up after itself | `npm run dev` |
+| `npm run seed:cvs` | Uploads all of `seed/resumes` through the API, then drafts. Skips CVs already scored | `npm run dev` |
+| `npm run regression` | Full pool: 60 scored, 5 + 5 above the line with briefs/invites, rejections below, no PII leaks, ranking sanity, drift vs last run (`seed/.regression-snapshot.json`) | seeded DB |
+| `npm run typecheck`, `npm run lint`, `npm run build` | | |
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Email sending
+Resend's default sender (`onboarding@resend.dev`) only delivers to the address that owns the Resend
+account. Other recipients are rejected by Resend; the app shows the error and marks the draft `failed`
+(it can be retried). Sends are idempotent per draft version, and a send is claimed (`sending`) before the
+API call so a double click cannot send twice.

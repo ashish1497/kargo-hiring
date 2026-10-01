@@ -1,0 +1,153 @@
+KARGO HIRING RUBRIC — Product Manager (PM) and Senior Product Manager (SPM)
+Source: 8 past hire profiles + outcomes table. Job descriptions used ONLY to understand the roles.
+
+OUTCOMES
+  Exceeds:  Rohan Desai (Head of Eng), Sunita Krishnamurthy (Ops Lead), Aditya Shetty (Sales Lead),
+            Meghna Tiwari (CS Manager), Lavanya Iyer (PM)
+  Meets:    Vikram Nair (PM), Rahul Bose (Growth & Marketing Lead)
+  Below:    Preetham Rao (Backend Engineer)
+
+======================================================================
+STEP 1 — PATTERNS (Exceeds vs Meets/Below)
+======================================================================
+
+Pattern A — Time on the operations floor of freight/logistics, before or alongside their function.
+  Every Exceeds hire physically worked inside the operation Kargo sells into:
+  - Rohan: Operations Executive at a CHA firm, Nhava Sheva — 180+ shipments/month, coordinated daily with
+    shipping lines, ICD terminals, customs.
+  - Sunita: Documentation & Compliance Exec — 200+ shipments/month, BLs, COOs, CHAs, DGFT.
+  - Aditya: Sales at JNPT terminal services — "worked alongside the terminal operations team during peak
+    periods... berth windows, DO releases".
+  - Meghna: Freight forwarder documentation desk — resolved a customs hold overnight with the CHA.
+  - Lavanya: Carrier allocation and exception management at Mahindra Logistics, 800+ shipments/month.
+  Weak/absent in the others:
+  - Vikram: consulting internship → HR-tech SaaS. No logistics exposure at all.
+  - Preetham: touched logistics only through APIs (Delhivery/Bluedart integrations), never the operation.
+  - Rahul: fintech and HR-tech marketing. No operations exposure.
+
+Pattern B — Saw a broken process first-hand, fixed it without being asked, and peers adopted the fix.
+  - Rohan: built an Excel shipment tracker because the team "had no reliable way to know where each shipment
+    stood" — adopted by the 12-person ops team in two weeks. Later built a BL verification prototype over a
+    weekend; 30 colleagues using it within a month.
+  - Sunita: when the FMS vendor changed formats without notice, redesigned the intake workflow over a weekend;
+    retained permanently.
+  - Lavanya: same-day exception triage "that hadn't existed before" (-28% exceptions); visibility dashboard
+    adopted by 2 other regional teams.
+  - Meghna: wrote the onboarding checklist that became the team standard.
+  - Aditya: built the company's first case-study programme, now used by the whole sales team.
+  Contrast: Vikram's and Rahul's wins are assigned scope delivered well (features shipped, pipeline hit,
+  templates for an existing PM team). Preetham's wins are inside a 12-engineer team's mandate. None show a
+  self-spotted operational problem fixed and adopted bottom-up.
+
+Pattern C — Names their own misses and carries ownership under pressure with no layer above.
+  - Lavanya: killed 2 of her own features on usage data; wrote the outage post-mortem (internal and customer
+    versions) and owned follow-ups to closure. Review note: "She doesn't hedge."
+  - Aditya: ran and shared a post-mortem on a 4-month deal he lost; it became standard practice.
+  - Rohan: led a vendor migration under time pressure; "translate field requirements into engineering spec
+    without a product layer".
+  - Meghna: "no escalation to management in the last 14 months"; fixed the customs hold "before the client
+    became aware".
+  - Sunita: independent consultant, owns engagements end-to-end with no manager.
+  Contrast: Vikram, Rahul and Preetham list only wins — no killed work, no post-mortem, no failure owned.
+  Vikram and Preetham worked inside layered teams (4-person PM team presenting to CTO; 12-engineer team).
+
+NOT USED AS SIGNAL: years of experience, titles, MBA/college tier, certifications (both Exceeds and
+Meets hires hold them — Lavanya, Meghna, Vikram, Rahul), tool lists, speaking slots.
+
+======================================================================
+STEP 2 — RUBRIC
+Each criterion scored 1–5. Weighted total = sum(score/5 * weight) → 0–100.
+======================================================================
+
+------------------------------ PM ------------------------------
+
+1. Operations-floor time
+What a strong candidate looks like: Has held a role where they personally handled shipments, documents,
+carriers, customs, warehouse or dispatch work day to day — names concrete volumes, counterparties (CHAs,
+shipping lines, carriers, port/ICD) or incidents. 5 = 1+ year doing the operational work itself in
+freight/logistics/supply chain. 3 = adjacent ops (field ops, marketplace ops, supply ops in another industry)
+or embedded with ops users for weeks. 1 = only desk, consulting, strategy or API-level contact with operations.
+Source: Rohan, Sunita, Aditya, Meghna, Lavanya (present); Vikram, Preetham, Rahul (absent).
+Weight: 30%
+
+2. Unprompted fix, adopted by peers
+What a strong candidate looks like: The CV describes a problem they noticed themselves, a fix they built
+without being assigned it (sheet, tool, process, prototype), and evidence others adopted it (team/branch
+standard, N users, retained permanently). 5 = clear self-initiated fix with named adoption. 3 = built something
+new but it was their assigned scope, or adoption not stated. 1 = only delivered assigned work.
+Source: Rohan (tracker, BL prototype), Sunita (weekend workflow), Lavanya (triage, dashboard).
+Weight: 25%
+
+3. Names own misses
+What a strong candidate looks like: Explicitly records something that failed or was cut, and what they did
+about it — killed a feature on data, post-mortem written and shared, reversed their own earlier call.
+5 = specific kill/post-mortem with the action taken. 3 = mentions iteration or learning without a concrete
+failure. 1 = CV contains only wins.
+Source: Lavanya (killed 2 features, outage post-mortem), Aditya (lost-deal post-mortem).
+Weight: 20%
+
+4. Owns it with no layer above
+What a strong candidate looks like: Was the sole/first owner of an area — no manager in their function making
+the calls — and decisions were theirs end to end. 5 = sole owner, reported to founder/CEO/business head, made
+calls themselves. 3 = owned a module inside a team with senior PMs/leads above. 1 = supported others' decisions.
+Source: Lavanya (sole PM), Rohan (no product layer), Aditya (no AM layer), Meghna (no escalation in 14 months).
+Weight: 15%
+
+5. Holds under pressure
+What a strong candidate looks like: Describes a specific live incident (customs hold, outage, vendor change,
+peak volume, deadline) that they personally resolved, with the outcome. 5 = named incident, their action,
+outcome. 3 = general "high-pressure environment" claim with some evidence. 1 = nothing.
+Source: Meghna (overnight customs hold), Sunita (vendor format change), Rohan (migration under pressure).
+Weight: 10%
+
+PM total: 100%
+
+------------------------------ SPM ------------------------------
+Same criteria; bar is higher, especially on independence.
+
+1. Operations-floor time
+What a strong candidate looks like: Has personally done day-to-day operational work in freight/logistics/supply
+chain (shipments, documents, carriers, customs, port/ICD, warehouse), AND that experience shaped a product or
+system decision they can point to (e.g. "designed X because I knew what the data actually contained from my time in terminal ops").
+5 = multi-year ops floor time + a product/system decision that came directly from it. 3 = ops floor time with no
+link to later decisions, or deep adjacent ops. 1 = no operational exposure.
+Source: Rohan (CHA ops → tracking platform), Lavanya (carrier ops → carrier-integration product).
+Weight: 25%
+
+2. Unprompted fix, adopted by peers
+What a strong candidate looks like: Self-initiated change that spread beyond their own team — to the company,
+other regions, or customers — or reshaped how a function works. 5 = cross-team/company-wide adoption of
+something they started unasked. 3 = adopted within their own team only. 1 = assigned work only.
+Source: Rohan (BL module became a core platform feature), Lavanya (dashboard adopted by 2 other teams).
+Weight: 20%
+
+3. Names own misses
+What a strong candidate looks like: Has killed or reversed something significant — including their own idea —
+and owned the consequences publicly (post-mortem, customer communication). 5 = killed own idea / major
+reversal with documented follow-through. 3 = killed others' features or minor reversals. 1 = only wins.
+Source: Lavanya, Aditya.
+Weight: 20%
+
+4. Owns it with no layer above
+What a strong candidate looks like: Has run a product area or function with nobody senior in that function
+above them for 2+ years, reporting to a founder/CEO, making architectural or business calls alone and living
+with them. 5 = led the function/area solo for 2+ years with decisions they defend. 3 = sole owner of an area
+for under 2 years, or senior IC under a Head of Product. 1 = worked within a layered PM org.
+Source: Rohan ("most senior engineer in the room"), Sunita (independent), Lavanya (sole PM).
+Weight: 25%
+
+5. Holds under pressure
+What a strong candidate looks like: Describes a specific high-stakes incident — platform-level outage, migration,
+or customer-threatening failure — that they personally led to resolution, with the outcome. 5 = led resolution of a high-stakes incident end to end.
+3 = contributed to one. 1 = nothing.
+Source: Rohan (vendor migration, no data loss), Lavanya (4-hour outage).
+Weight: 10%
+
+SPM total: 100%
+
+======================================================================
+SCORING RULES
+- Score only on what the CV text shows. No credit for titles, years, certifications, college or tools.
+- Every score must carry a one-line reason quoting or paraphrasing the CV line it rests on.
+- Buzzwords without an outcome ("strategic enabler", "orchestrated", "pioneered") score as absent.
+- Every candidate is scored on BOTH rubrics regardless of the role applied for.
